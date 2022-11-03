@@ -1,7 +1,7 @@
 ```mermaid
 sequenceDiagram
     actor c as client node
-    actor cr as client relay node
+    actor cr as client relay node (dht)
     actor sr as server relay node
     actor s as server node
 
