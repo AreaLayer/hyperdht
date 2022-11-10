@@ -33,3 +33,50 @@ As a result of the handshake:
 - the server node has a firewall session with its own relay node and the client relay node.
 
 The client node may then begin holepunching a connection directly to the server node as it now knows its address.
+
+### Proxying
+
+#### Client
+
+```mermaid
+sequenceDiagram
+    actor p as proxy node
+    actor c as client node
+    actor cr as client relay node (dht)
+    actor sr as server relay node
+    actor s as server node
+
+    note over cr, s: might be the same node
+    note over sr, s: might be the same node
+
+    c ->> cr: { command: FIND_PEER, target }
+    cr -->> c: { command: FIND_PEER, target, value: { publicKey, relayAddresses } }
+
+    c ->> p: { ... }
+    p ->> sr: { command: PEER_HANDSHAKE, target, value: { mode: FROM_CLIENT, ... } }
+    sr ->> s: { command: PEER_HANDSHAKE, target, value: { mode: FROM_RELAY, ... } }
+    s ->> cr: { command: PEER_HANDSHAKE, target, value: { mode: FROM_SERVER, ... } }
+    cr -->> p: { command: PEER_HANDSHAKE, target, value: { mode: REPLY, ... } }
+```
+
+#### Server
+
+```mermaid
+sequenceDiagram
+    actor c as client node
+    actor cr as client relay node (dht)
+    actor sr as server relay node
+    actor s as server node
+    actor p as proxy node
+
+    note over sr, s: might be the same node
+
+    c ->> cr: { command: FIND_PEER, target }
+    cr -->> c: { command: FIND_PEER, target, value: { publicKey, relayAddresses } }
+
+    c ->> sr: { command: PEER_HANDSHAKE, target, value: { mode: FROM_CLIENT, ... } }
+    sr ->> s: { command: PEER_HANDSHAKE, target, value: { mode: FROM_RELAY, ... } }
+    s ->> p: { ... }
+    p ->> cr: { command: PEER_HANDSHAKE, target, value: { mode: FROM_SERVER, ... } }
+    cr -->> c: { command: PEER_HANDSHAKE, target, value: { mode: REPLY, ... } }
+```
