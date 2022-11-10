@@ -40,17 +40,14 @@ The client node may then begin holepunching a connection directly to the server 
 
 ```mermaid
 sequenceDiagram
-    actor p as proxy node
     actor c as client node
+    actor p as proxy node
     actor cr as client relay node (dht)
     actor sr as server relay node
     actor s as server node
 
     note over cr, s: might be the same node
     note over sr, s: might be the same node
-
-    c ->> cr: { command: FIND_PEER, target }
-    cr -->> c: { command: FIND_PEER, target, value: { publicKey, relayAddresses } }
 
     c ->> p: { ... }
     p ->> sr: { command: PEER_HANDSHAKE, target, value: { mode: FROM_CLIENT, ... } }
@@ -70,9 +67,6 @@ sequenceDiagram
     actor p as proxy node
 
     note over sr, s: might be the same node
-
-    c ->> cr: { command: FIND_PEER, target }
-    cr -->> c: { command: FIND_PEER, target, value: { publicKey, relayAddresses } }
 
     c ->> sr: { command: PEER_HANDSHAKE, target, value: { mode: FROM_CLIENT, ... } }
     sr ->> s: { command: PEER_HANDSHAKE, target, value: { mode: FROM_RELAY, ... } }
