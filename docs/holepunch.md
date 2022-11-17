@@ -35,6 +35,8 @@ In tandem with the holepunch messages, the client and server will attempt to pin
 
 ### Proxying
 
+> :warning: This is a draft of an upcoming proxy protocol that allows a peer to connect to another peer through a proxy node. This may be beneficial if the peer determines network conditions between itself and the other peer unfavorable, but knows of another node that may have a better chance of holepunching a direct connection to the other peer.
+
 #### Client
 
 ```mermaid
